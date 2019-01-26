@@ -13,9 +13,9 @@
  * @author Eric Ahrens 
  */
 
-
 loadAPI(1);
-host.defineController("Native Instruments", "Maschine Jam Marc Version", "5.03", "2d6c7fa9-8679-4e57-acc0-7788b1ce9afb");
+var versionController = "5.05";
+host.defineController("Native Instruments", "Maschine Jam Marc Version", versionController, "cdbbe630-9edb-11e8-b568-0800200c9a66");
 host.defineMidiPorts(1, 1);
 host.addDeviceNameBasedDiscoveryPair(["Maschine Jam - 1"], ["Maschine Jam - 1"]);
 host.addDeviceNameBasedDiscoveryPair(["Maschine Jam - 2"], ["Maschine Jam - 2"]);
@@ -161,8 +161,8 @@ function init() {
 	shiftReceivers.push(modeHandler);
 
 	handleblink();
-	host.scheduleTask(handleBatchUpdate, null, 1);
-	println(" #### Maschine JAM Marc Version 5.03 ######");
+    host.scheduleTask(handleBatchUpdate, null, 1);
+    println(" #### Maschine JAM Marc Version " + versionController + " ######");
        
 	notificationSettings = host.getNotificationSettings();
 	host.scheduleTask(function () {
