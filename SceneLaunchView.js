@@ -157,6 +157,22 @@ function SceneLaunchView(trackBank, numScenes, numTracks) {
         }
     };
 
+    var isDuplating = false;
+
+    this.getIsDuplicating = function () {
+        return isDuplating;
+    };
+
+    this.resetIsDuplicating = function () {
+        //println("reset isduplicating secne");
+        isDuplating = false;
+    };
+
+    this.setIsDuplicating = function (value) {
+        //println("set isduplicating to :" + value);
+        isDuplating = value;
+    };
+
     this.handleEvent = function (index, value) {
         if (exist[index]) {
             var color = getSceneColor(index);
@@ -180,6 +196,7 @@ function SceneLaunchView(trackBank, numScenes, numTracks) {
             scene.showInEditor();
             scene.selectInEditor();
             applicationControl.getApplication().duplicate();
+            this.setIsDuplicating(true);
 
 
         } else if (modifiers.isClearDown()) {

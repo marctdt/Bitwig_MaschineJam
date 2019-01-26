@@ -40,7 +40,7 @@ function ClipMode(clipView, trackView, sceneView, trackStates) {
 
     this.notifyModifier = function (modifierState) {
         if (modifierState === 8) {
-            if (!clipView.getDuplicateCopyToggle() && !globalClipView.getDoubleToggle()) {
+            if (!clipView.getDuplicateCopyToggle() && !globalClipView.getDoubleToggle() && !sceneView.getIsDuplicating()) {
                 applicationControl.duplicate();
                 host.showPopupNotification("Duplicate");
             }
@@ -51,6 +51,7 @@ function ClipMode(clipView, trackView, sceneView, trackStates) {
 
             clipView.resetDuplicateCopyToggle();
             globalClipView.resetDoubleToggle();
+            sceneView.resetIsDuplicating();
             clipView.update();
         }
         else if (modifierState === 5) {
