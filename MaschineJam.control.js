@@ -15,7 +15,7 @@
 
 
 loadAPI(1);
-host.defineController("Native Instruments", "Maschine Jam Marc Version", "501", "cdbbe630-9edb-11e8-b568-0800200c9a66");
+host.defineController("Native Instruments", "Maschine Jam Marc Version", "5.02", "cdbbe630-9edb-11e8-b568-0800200c9a66");
 host.defineMidiPorts(1, 1);
 host.addDeviceNameBasedDiscoveryPair(["Maschine Jam - 1"], ["Maschine Jam - 1"]);
 host.addDeviceNameBasedDiscoveryPair(["Maschine Jam - 2"], ["Maschine Jam - 2"]);
@@ -162,7 +162,7 @@ function init() {
 
 	handleblink();
 	host.scheduleTask(handleBatchUpdate, null, 1);
-	println(" #### Maschine JAM Version 0.7 ######");
+	println(" #### Maschine JAM Marc Version 5.02 ######");
        
 	notificationSettings = host.getNotificationSettings();
 	host.scheduleTask(function () {
