@@ -292,6 +292,7 @@ function ClipLaunchView(trackBank) {
         } else if (modifiers.isClearDown()) {//------------------------CLEAR
             //CLEAR verursacht probleme mit duplicate
             slots.deleteClip(rowt);
+            applicationControl.setClearUsed(true);
         } else if (modifiers.isMacroDown()) {//------------------------MACRO
             slots.createEmptyClip(rowt, 4);
         } else if (modifiers.isDuplicateDown()) {//--------------------DUPLICATE
@@ -375,6 +376,7 @@ function ClipLaunchView(trackBank) {
             trackBank.getTrack(colt).getClipLauncherSlots().deleteClip(rowt);
             recalcView();
             host.showPopupNotification("should be recalc");
+            applicationControl.setClearUsed(true);
         } else if (modifiers.isMacroDown()) {
             trackBank.getTrack(colt).getClipLauncherSlots().createEmptyClip(rowt, 4);
         } else if (modifiers.isDuplicateDown()) {

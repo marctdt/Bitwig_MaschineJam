@@ -99,8 +99,11 @@ function StepMode(noteView, drumPadView, trackView, trackHandler, clip, cursorDe
     };
 
     this.notifyClear = function (clearDown) {
-        if (clearDown)
+        if (clearDown) {
             clip.clearSteps();
+            applicationControl.setClearUsed(true);
+        }
+            
     };
 
     this.modifyGrid = function (incValue, pressedModifier) {

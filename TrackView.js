@@ -243,6 +243,7 @@ function TrackView(trackBank, parent, basemode) {
                         track.makeVisibleInArranger();
                         track.selectInMixer();
                         applicationControl.getApplication().remove();
+                        applicationControl.setClearUsed(true);
                     }
                 } else {
                     if (states[index].exists) {

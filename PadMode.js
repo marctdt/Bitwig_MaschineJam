@@ -95,8 +95,10 @@ function PadMode(noteView, drumPadView, trackView, sceneView, cursorClip, cursor
     };
 
     this.notifyClear = function (clearDown) {
-        if (clearDown)
+        if (clearDown) {
             cursorClip.clearSteps();
+            applicationControl.setClearUsed(true);
+        }
     };
 
     this.postEnter = function () {

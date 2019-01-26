@@ -189,6 +189,7 @@ function SceneLaunchView(trackBank, numScenes, numTracks) {
             scene.showInEditor();
             scene.selectInEditor();
             applicationControl.getApplication().remove();
+            applicationControl.setClearUsed(true);
         }
 
 

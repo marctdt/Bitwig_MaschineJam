@@ -5,6 +5,7 @@
 function ApplicationControl(cursorClip) {
     var application = host.createApplication();
     var layout = "";
+    this.isClearUsed = false;
 
     var APPCOMMANDS = {
         UNDO: 0,
@@ -73,6 +74,25 @@ function ApplicationControl(cursorClip) {
         return application;
     };
 
+   
+
+    this.setClearUsed = function (value) {
+        this.isClearUsed = value;
+        //println("set to "+ value);
+    };
+
+    this.getIsClearUsed = function () {
+        return this.isClearUsed;
+    };
+
+    this.resetClearUsed = function () {
+        this.isClearUsed = false;
+        //println("clear reset :" + this.isClearUsed);
+    };
+
+    this.remove = function () {
+        application.remove();
+    };
 
     this.showAudioEditor = function () {
         application.toggleDevices();

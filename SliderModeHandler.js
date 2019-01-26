@@ -301,6 +301,7 @@ function SliderModeHandler(mixerTrackBank, effectTrackBank, numTracks, cursorDev
             applicationControl.focusDevicePanel();
             cursorDevice.selectInEditor();
             applicationControl.getApplication().remove();
+            applicationControl.setClearUsed(true);
         }
         currentMode.showParamAssignments();
     });

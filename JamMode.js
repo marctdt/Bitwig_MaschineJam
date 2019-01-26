@@ -25,7 +25,18 @@ function JamMode(mainView, trackView, sceneView) {
     this.pushAction = function (/* value */) {
     };
 
-    this.notifyClear = function (/*clearDown*/) {
+    //this.notifyClear = function (/*clearDown*/) {
+    //};
+
+    this.notifyClear = function (clearDown) {
+        if (!clearDown && !applicationControl.getIsClearUsed()) {
+            applicationControl.remove();
+        }
+        if (!clearDown)
+            applicationControl.resetClearUsed();
+
+        this.update();
+        
     };
 
     this.recalcView = function () {
