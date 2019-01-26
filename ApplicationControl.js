@@ -130,6 +130,10 @@ function ApplicationControl(cursorClip) {
         }
     };
 
+    this.duplicate = function () {
+        application.duplicate();    
+    }
+
     this.exec = function (command) {
         switch (command) {
             case APPCOMMANDS.UNDO:

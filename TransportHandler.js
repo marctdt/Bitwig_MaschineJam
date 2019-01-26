@@ -213,7 +213,12 @@ function TransportHandler(trackHandler, cursorDevice) {
         if (shift) {
             transport.stop();
         } else {
-            transport.play();
+            if (playing) {
+                transport.stop();
+            }
+            else {
+                transport.play();
+            }
         }
     });
 

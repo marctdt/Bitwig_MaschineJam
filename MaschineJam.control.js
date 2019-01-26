@@ -15,7 +15,7 @@
 
 
 loadAPI(1);
-host.defineController("NI + Marc", "Maschine Jam Marc version", "5.00", "cdbbe630-9edb-11e8-b568-0800200c9a66");
+host.defineController("Native Instruments", "Maschine Jam Marc Version", "501", "cdbbe630-9edb-11e8-b568-0800200c9a66");
 host.defineMidiPorts(1, 1);
 host.addDeviceNameBasedDiscoveryPair(["Maschine Jam - 1"], ["Maschine Jam - 1"]);
 host.addDeviceNameBasedDiscoveryPair(["Maschine Jam - 2"], ["Maschine Jam - 2"]);
@@ -181,11 +181,21 @@ function GlobalClipView(patternLengthView, clip) {
 	var clipSelected = false;
 	/** @type {Clip} */
 	var clipTrackType = "EMPTY";
-	var track = clip.getTrack();
+    var track = clip.getTrack();
+    var doubleToggle = false;
 
 	this.duplicateContent = function () {
-		clip.duplicateContent();
-	};
+        clip.duplicateContent();
+        doubleToggle = true;
+    };
+
+    this.resetDoubleToggle = function () {
+        doubleToggle = false;
+    }
+
+    this.getDoubleToggle = function () {
+        return doubleToggle;
+    }
 
 	track.exists().addValueObserver(function (value) {
 		clipSelected = value;

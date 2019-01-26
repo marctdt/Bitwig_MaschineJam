@@ -39,12 +39,19 @@ function ClipMode(clipView, trackView, sceneView, trackStates) {
 	};
 
 	this.notifyModifier = function (modifierState) {
-                if (modifierState === 0) {
-                    clipView.resetDuplicateCopyToggle();
+        if (modifierState === 0) {
+            if (!clipView.getDuplicateCopyToggle() && !globalClipView.getDoubleToggle()) {
+                applicationControl.duplicate();
+                host.showPopupNotification("Duplicate");
+            }
+            clipView.resetDuplicateCopyToggle();
+            globalClipView.resetDoubleToggle();
                     clipView.update();
                 }
 		if (modifierState === 5) {
-			globalClipView.duplicateContent(); // Duplicate + Shift
+            globalClipView.duplicateContent(); // Duplicate + Shift
+            host.showPopupNotification("Double");
+
 		}
 	};
 	/**

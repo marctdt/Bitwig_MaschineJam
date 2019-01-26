@@ -350,6 +350,10 @@ function ClipLaunchView(trackBank) {
         duplicateCopyToggle = false;
     }
 
+    this.getDuplicateCopyToggle = function () {
+        return duplicateCopyToggle ;
+    }
+
     function showInEditor(slots, row) {
         applicationControl.showNoteEditor();
         slots.showInEditor(row);
