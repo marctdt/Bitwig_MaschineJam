@@ -96,7 +96,6 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
         } else {
             selectPressed = false;
         }
-        //currentMode.notifyModifier((selectDown ? ModifierMask.Select : 0) | (shiftDown ? ModifierMask.Shift : 0));
     }); 
 
     groove.getEnabled().addValueObserver(2, function (value) {
@@ -181,13 +180,17 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
         switch (mode) {
             case Modes.NONE:
                 if (value === 1) {
-                    if (shift)
+                    if (selectPressed)
+                        cursorTrack.selectNext();
+                    else if (shift)
                         for (i = 0; i < speed; i++)
                             transport.fastForward();
                     else
                             transport.fastForward();
                 }
                 else {
+                    if (selectPressed)
+                        cursorTrack.selectPrevious();
                     if(shift)
                         for (i = 0; i < speed; i++)
                             transport.rewind();
