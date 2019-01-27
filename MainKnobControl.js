@@ -319,9 +319,14 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
         browsing = value;
         browserButton.sendValue(browsing ? 127 : 0, true);
     });
-
+    var workaroundBrowsing = false;
     browserButton.setCallback(function (value) {
         if (value === 0) {
+            if (workaroundBrowsing) {
+                application.arrowKeyDown();
+                application.arrowKeyRight();
+                workaroundBrowsing = false;
+            }
             return;
         }
         if (browsing) {
@@ -333,11 +338,13 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
             //noch nich ganz am worken
             
             if (modifiers.isSelectDown()) {
-                cursorDevice.browseToInsertBeforeDevice();
+                cursorDevice.beforeDeviceInsertionPoint().browse();
+                workaroundBrowsing = true;
                 mode = Modes.BROWSER;
             }
             else if (shift) {
-                cursorDevice.browseToInsertAfterDevice();
+                cursorDevice.afterDeviceInsertionPoint().browse();
+                workaroundBrowsing = true;
                 mode = Modes.BROWSER;
             }else {
                 deviceBrowser.activateSession(deviceBrowser.getDeviceSession());
