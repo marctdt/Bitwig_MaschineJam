@@ -486,7 +486,8 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
         pressed = value !== 0;
         switch (mode) {
             case Modes.BROWSER:
-                application.enter();
+                //application.enter();
+                deviceBrowser.commitSelectedResult();
                 disableMode();
                 break;
             case Modes.GRID_LEN:
