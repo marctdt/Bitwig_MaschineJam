@@ -212,7 +212,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                 else {
                     if (modifiers.isSelectDown())
                         cursorTrack.selectPrevious();
-                    if(shift)
+                    else if(shift)
                         for (i = 0; i < speed; i++)
                             transport.rewind();
                     else

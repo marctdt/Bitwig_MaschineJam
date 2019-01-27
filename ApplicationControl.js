@@ -38,10 +38,16 @@ function ApplicationControl(cursorClip) {
                 currentMode.recalcView();
                 // rotateView();
             } else {
-                if (layout === "MIX") {
-                    application.setPanelLayout("ARRANGE");
-                } else if (layout == "ARRANGE") {
+                if (modifiers.isSelectDown()) {
+                    //if (layout === "EDIT") {
+                    //    application.setPanelLayout("ARRANGE");
+                    //} else
+                        application.setPanelLayout("EDIT");
+                }
+                 else if (layout === "ARRANGE") {
                     application.setPanelLayout("MIX");
+                }else /*if (layout === "MIX") */{
+                    application.setPanelLayout("ARRANGE");
                 }
             }
         }
@@ -62,7 +68,7 @@ function ApplicationControl(cursorClip) {
         layout = newPanelLayout;
         if (layout === "MIX") {
             arrangeButton.sendValue(0);
-        } else if (layout == "ARRANGE") {
+        } else if (layout === "ARRANGE" || layout === "EDIT") {
             arrangeButton.sendValue(127);
         }
     }, 16);
