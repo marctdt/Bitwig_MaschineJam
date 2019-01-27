@@ -359,12 +359,12 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
             
             
 
-            if (modifiers.isSelectDown()) {
+            if (shift) {
                 cursorDevice.beforeDeviceInsertionPoint().browse();
                 workaroundBrowsing = true;
                 mode = Modes.BROWSER;
             }
-            else if (shift) {
+            else if (modifiers.isSelectDown()) {
                 cursorDevice.afterDeviceInsertionPoint().browse();
                 workaroundBrowsing = true;
                 mode = Modes.BROWSER;
