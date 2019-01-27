@@ -371,6 +371,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
             }else {
                 deviceBrowser.activateSession(deviceBrowser.getDeviceSession());
                 deviceBrowser.startBrowsing();
+                workaroundBrowsing = true;
                 mode = Modes.BROWSER;
             }
         }
