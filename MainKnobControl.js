@@ -45,6 +45,17 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
     var cursorTrackDeviceBank = cursorTrack.createDeviceBank(8);
     var browsing = false;
 
+
+    this.getBrowsing = function () {
+        return browsing;
+    };
+
+    var cursorBrowsingSession = null;
+
+    this.getBrowser = function () {
+        return cursorBrowsingSession;
+    };
+
     var stackMode = -1;
 
     var swingEditMode = SwingModes.ShuffleAmt;
@@ -70,6 +81,16 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
     cursorClip.getLoopLength().addRawValueObserver(function (length) {
         clipLength = length;
     });
+
+
+    cursorBrowsingSession = deviceBrowser.createCursorSession();
+            cursorBrowsingSession.getCursorFilter().addNameObserver(99, "", function (value) {
+                if (value !== "") {
+                    host.showPopupNotification(value);
+                    println(value);
+                }
+            });
+
 
     var groove = host.createGroove();
     var grooveActive = false;
@@ -205,7 +226,6 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                 break;
             case Modes.BROWSER:
                 //println(value);
-                var cursorBrowsingSession = deviceBrowser.createCursorSession();
                 speed = 6;
                 if (value === 1) {
                     if (modifiers.isShiftDown()) {
@@ -337,6 +357,8 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
             
             //noch nich ganz am worken
             
+            
+
             if (modifiers.isSelectDown()) {
                 cursorDevice.beforeDeviceInsertionPoint().browse();
                 workaroundBrowsing = true;

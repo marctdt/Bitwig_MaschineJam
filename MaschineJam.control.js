@@ -14,7 +14,7 @@
  */
 
 loadAPI(1);
-var versionController = "5.12";
+var versionController = "5.13";
 host.defineController("Native Instruments", "Maschine Jam Marc Version", versionController, "ca344330-d262-4b84-97ce-20a02c55312e");
 host.defineMidiPorts(1, 1);
 host.addDeviceNameBasedDiscoveryPair(["Maschine Jam - 1"], ["Maschine Jam - 1"]);
@@ -78,6 +78,7 @@ var applicationControl = null;
 var transport = null;
 
 var gGlipOrientation = ORIENTATION.TrackBased;
+var knobControl = null;
 
 function init() {
 	var numTracks = 8;
@@ -130,7 +131,8 @@ function init() {
 
 	controls.sliderBank = new SliderModeHandler(trackBankContainer, efxTrackBankContainer, numTracks, cursorDevice, trackHandler);
 
-	var mainKnobControl = new MainKnobKontrol(cursorTrack, transport.transport(), clip, cursorDevice);
+    var mainKnobControl = new MainKnobKontrol(cursorTrack, transport.transport(), clip, cursorDevice);
+    knobControl = mainKnobControl;
 
 	var modeHandler = new ModeHandler(cliplaunchMode, padMode, stepMode, effectMode, clip, trackHandler, trackViewContainer);
 
@@ -685,30 +687,64 @@ function initLeftButtons() {
 	var dirPadLeft = controls.createButton(DirectionPad.LEFT);
 	var dirPadRight = controls.createButton(DirectionPad.RIGHT);
 	var dirPadDown = controls.createButton(DirectionPad.DOWN);
+    var speed = 6;
+    var i = 0;
 
 	dirPadUp.setCallback(
 		function (value) {
+
 			if (value !== 0) {
-				currentMode.navigate(DirectionPad.TOP);
+                if (knobControl.getBrowsing()) {
+
+                    if (modifiers.isShiftDown()) {
+                        for (i = 0; i < speed; i++) {
+                            knobControl.getBrowser().getCursorFilter().createCursorItem().selectPrevious();
+                        }
+                    }
+                    else {
+                        knobControl.getBrowser().getCursorFilter().createCursorItem().selectPrevious();
+                    }
+                }
+                else {
+                    currentMode.navigate(DirectionPad.TOP);
+                }
 			}
 		});
 	dirPadLeft.setCallback(
 		function (value) {
 			if (value !== 0) {
-				currentMode.navigate(DirectionPad.LEFT);
+                if (knobControl.getBrowsing()) {
+                    knobControl.getBrowser().getCursorFilter().selectPrevious();
+                } else {
+                    currentMode.navigate(DirectionPad.LEFT);
+                }
 			}
 		});
 	dirPadRight.setCallback(
 		function (value) {
 			modifiers.setDpadRightDown(value);
 			if (value !== 0) {
-				currentMode.navigate(DirectionPad.RIGHT);
+                if (knobControl.getBrowsing()) {
+                    knobControl.getBrowser().getCursorFilter().selectNext();
+                } else {
+                    currentMode.navigate(DirectionPad.RIGHT);
+                }
 			}
 		});
 	dirPadDown.setCallback(
 		function (value) {
 			if (value !== 0) {
-				currentMode.navigate(DirectionPad.DOWN);
+                if (knobControl.getBrowsing()) {
+                    if (modifiers.isShiftDown()) {
+                        for (i = 0; i < speed; i++) {
+                        knobControl.getBrowser().getCursorFilter().createCursorItem().selectNext();
+                        }
+                    }
+                    else {
+                        knobControl.getBrowser().getCursorFilter().createCursorItem().selectNext();
+                    }
+                }
+                else { currentMode.navigate(DirectionPad.DOWN); }
 			}
 		});
 
