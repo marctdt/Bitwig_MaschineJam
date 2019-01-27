@@ -17,7 +17,7 @@ function ModifierBank() {
     var dpadRightDown = false;
 
     selectButton.setCallback(function (value) {
-        println("select is Down");
+        //println("select is Down");
         selectDown = value === 127;
         selectButton.sendValue(value);
         currentMode.notifyModifier((selectDown ? ModifierMask.Select : 0) | (shiftDown ? ModifierMask.Shift : 0));
