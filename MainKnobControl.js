@@ -208,11 +208,11 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                 var cursorBrowsingSession = null;
                 speed = 6;
                 if (value === 1) {
-                    if (selectPressed) {
+                    if (modifiers.isShiftDown()) {
                         cursorBrowsingSession = deviceBrowser.createCursorSession();
                         cursorBrowsingSession.selectNext();
                     } else {
-                        if (modifiers.isShiftDown()) {
+                            if (selectPressed) {
                             for (i = 0; i < speed; i++) {
                                 application.arrowKeyDown();
                             }
@@ -222,11 +222,11 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                         }
                     }
                 } else {
-                    if (selectPressed) {
+                    if (modifiers.isShiftDown()) {
                         cursorBrowsingSession = deviceBrowser.createCursorSession();
                         cursorBrowsingSession.selectPrevious();
                     } else {
-                        if (modifiers.isShiftDown()) {
+                    if (selectPressed) {
                             for (i = 0; i < speed; i++) {
                             application.arrowKeyUp();
                             }
