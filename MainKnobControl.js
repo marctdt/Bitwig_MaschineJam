@@ -205,33 +205,35 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                 break;
             case Modes.BROWSER:
                 //println(value);
-                var cursorBrowsingSession = null;
+                var cursorBrowsingSession = deviceBrowser.createCursorSession();
                 speed = 6;
                 if (value === 1) {
                     if (modifiers.isShiftDown()) {
-                        cursorBrowsingSession = deviceBrowser.createCursorSession();
                         cursorBrowsingSession.selectNext();
                     } else {
                             if (selectPressed) {
                             for (i = 0; i < speed; i++) {
-                                application.arrowKeyDown();
+                                //application.arrowKeyDown();
+                                cursorBrowsingSession.getCursorResult().selectNext();
                             }
                         }
                         else {
-                                application.arrowKeyDown();
+                                cursorBrowsingSession.getCursorResult().selectNext();
+                                //application.arrowKeyDown();
                         }
                     }
                 } else {
                     if (modifiers.isShiftDown()) {
-                        cursorBrowsingSession = deviceBrowser.createCursorSession();
                         cursorBrowsingSession.selectPrevious();
                     } else {
                     if (selectPressed) {
-                            for (i = 0; i < speed; i++) {
-                            application.arrowKeyUp();
+                        for (i = 0; i < speed; i++) {
+                            cursorBrowsingSession.getCursorResult().selectPrevious();
+                            //application.arrowKeyUp();
                             }
                         } else {
-                            application.arrowKeyUp();
+                            cursorBrowsingSession.getCursorResult().selectPrevious();
+                            //application.arrowKeyUp();
                         }
                     }
                 }
