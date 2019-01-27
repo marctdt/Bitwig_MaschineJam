@@ -34,7 +34,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
     var swingButton = controls.createButton(MAIN_BUTTONS.SWING);
     var masterTrack = host.createMasterTrack(8);
     var browserButton = controls.createButton(MAIN_BUTTONS.BROWSE);
-    var selectButton = controls.createButton(MAIN_BUTTONS.SELECT);
+    //var selectButton = controls.createButton(MAIN_BUTTONS.SELECT);
     var mode = Modes.MST;
     var vuMode = Modes.MST;
     var masterVolume = 0;
@@ -80,23 +80,23 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
 
     var pressed = false;
     var shift = false;
-    var selectPressed = false;
+    //var selectPressed = false;
 
     masterButton.sendValue(127);
 
     this.notifyShift = function (shiftDown) {
         shift = shiftDown;
     };
-    selectButton.setCallback(function (value) {
-        selectDown = value === 127;
-        selectButton.sendValue(value);
+    //selectButton.setCallback(function (value) {
+    //    selectDown = value === 127;
+    //    selectButton.sendValue(value);
 
-        if (selectDown) {
-            selectPressed = true;
-        } else {
-            selectPressed = false;
-        }
-    }); 
+    //    if (selectDown) {
+    //        selectPressed = true;
+    //    } else {
+    //        selectPressed = false;
+    //    }
+    //}); 
 
     groove.getEnabled().addValueObserver(2, function (value) {
         grooveActive = value > 0;
@@ -180,7 +180,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
         switch (mode) {
             case Modes.NONE:
                 if (value === 1) {
-                    if (selectPressed)
+                    if (modifiers.isSelectDown())
                         cursorTrack.selectNext();
                     else if (shift)
                         for (i = 0; i < speed; i++)
@@ -189,7 +189,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                             transport.fastForward();
                 }
                 else {
-                    if (selectPressed)
+                    if (modifiers.isSelectDown())
                         cursorTrack.selectPrevious();
                     if(shift)
                         for (i = 0; i < speed; i++)
@@ -211,7 +211,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                     if (modifiers.isShiftDown()) {
                         cursorBrowsingSession.selectNext();
                     } else {
-                            if (selectPressed) {
+                            if (modifiers.isSelectDown()) {
                             for (i = 0; i < speed; i++) {
                                 //application.arrowKeyDown();
                                 cursorBrowsingSession.getCursorResult().selectNext();
@@ -226,7 +226,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                     if (modifiers.isShiftDown()) {
                         cursorBrowsingSession.selectPrevious();
                     } else {
-                    if (selectPressed) {
+                    if (modifiers.isSelectDown()) {
                         for (i = 0; i < speed; i++) {
                             cursorBrowsingSession.getCursorResult().selectPrevious();
                             //application.arrowKeyUp();
@@ -332,7 +332,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
             
             //noch nich ganz am worken
             
-            if (selectPressed) {
+            if (modifiers.isSelectDown()) {
                 cursorDevice.browseToInsertBeforeDevice();
                 mode = Modes.BROWSER;
             }
