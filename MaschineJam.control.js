@@ -14,8 +14,8 @@
  */
 
 loadAPI(1);
-var versionController = "5.05";
-host.defineController("Native Instruments", "Maschine Jam Marc Version", versionController, "cdbbe630-9edb-11e8-b568-0800200c9a66");
+var versionController = "5.06";
+host.defineController("Native Instruments", "Maschine Jam Marc Version", versionController, "ca344330-d262-4b84-97ce-20a02c55312e");
 host.defineMidiPorts(1, 1);
 host.addDeviceNameBasedDiscoveryPair(["Maschine Jam - 1"], ["Maschine Jam - 1"]);
 host.addDeviceNameBasedDiscoveryPair(["Maschine Jam - 2"], ["Maschine Jam - 2"]);

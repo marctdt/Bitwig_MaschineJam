@@ -71,13 +71,13 @@ function TransportHandler(trackHandler, cursorDevice) {
     });
 
     cursorDevice.addSlotsObserver(function (slotlist) {
-        /*
-         if(slotlist) {
-         println("SLOTS = > " + slotlist.length);
-         for(var i=0;i<slotlist.length;i++) {
-         println(" " + slotlist[i]); 
-         } 
-         }*/
+        
+         //if(slotlist) {
+         //println("SLOTS = > " + slotlist.length);
+         //for(var i=0;i<slotlist.length;i++) {
+         //println(" " + slotlist[i]); 
+         //} 
+         //}
         currentSlotList = slotlist;
     });
 
@@ -213,12 +213,12 @@ function TransportHandler(trackHandler, cursorDevice) {
         if (shift) {
             transport.stop();
         } else {
-            if (playing) {
-                transport.stop();
-            }
-            else {
+            //if (playing) {
+            //    transport.stop();
+            //}
+            //else {
                 transport.play();
-            }
+            //}
         }
     });
 

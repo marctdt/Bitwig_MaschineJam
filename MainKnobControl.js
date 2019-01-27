@@ -34,6 +34,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
     var swingButton = controls.createButton(MAIN_BUTTONS.SWING);
     var masterTrack = host.createMasterTrack(8);
     var browserButton = controls.createButton(MAIN_BUTTONS.BROWSE);
+    var selectButton = controls.createButton(MAIN_BUTTONS.SELECT);
     var mode = Modes.MST;
     var vuMode = Modes.MST;
     var masterVolume = 0;
@@ -79,12 +80,24 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
 
     var pressed = false;
     var shift = false;
+    var selectPressed = false;
 
     masterButton.sendValue(127);
 
     this.notifyShift = function (shiftDown) {
         shift = shiftDown;
     };
+    selectButton.setCallback(function (value) {
+        selectDown = value === 127;
+        selectButton.sendValue(value);
+
+        if (selectDown) {
+            selectPressed = true;
+        } else {
+            selectPressed = false;
+        }
+        //currentMode.notifyModifier((selectDown ? ModifierMask.Select : 0) | (shiftDown ? ModifierMask.Shift : 0));
+    }); 
 
     groove.getEnabled().addValueObserver(2, function (value) {
         grooveActive = value > 0;
@@ -114,13 +127,13 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
     });
 
     groove.getShuffleAmount().addValueDisplayObserver(10, "", function (display) {
-        if (mode == Modes.SWING) {
+        if (mode === Modes.SWING) {
             host.showPopupNotification("Shuffle Amount " + display);
         }
     });
 
     groove.getShuffleRate().addValueDisplayObserver(10, "", function (display) {
-        if (mode == Modes.SWING) {
+        if (mode === Modes.SWING) {
             host.showPopupNotification("Shuffle Rate " + display);
         }
     });
@@ -162,27 +175,61 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
     });
 
     mainEncoder.setCallback(function (value) {
+        //println("test" + value);
+        var speed = 6;
+        var i = 0;
         switch (mode) {
+            case Modes.NONE:
+                if (value === 1) {
+                    if (shift)
+                        for (i = 0; i < speed; i++)
+                            transport.fastForward();
+                    else
+                            transport.fastForward();
+                }
+                else {
+                    if(shift)
+                        for (i = 0; i < speed; i++)
+                            transport.rewind();
+                    else
+                            transport.rewind();
+                }
+                break;
             case Modes.MST:
                 var inc = (value === 1 ? 1 : -1) * (shift ? 1 : 6);
                 var newval = Math.min(Math.max(0, masterVolume + inc), paramRes - 1);
                 masterTrack.getVolume().set(newval, paramRes);
                 break;
             case Modes.BROWSER:
-                println(value);
+                //println(value);
+                var cursorBrowsingSession = null;
+                speed = 6;
                 if (value === 1) {
-                    if (modifiers.isShiftDown()) {
-                        var cursorBrowsingSession = deviceBrowser.createCursorSession();
+                    if (selectPressed) {
+                        cursorBrowsingSession = deviceBrowser.createCursorSession();
                         cursorBrowsingSession.selectNext();
                     } else {
-                        application.arrowKeyDown();
+                        if (modifiers.isShiftDown()) {
+                            for (i = 0; i < speed; i++) {
+                                application.arrowKeyDown();
+                            }
+                        }
+                        else {
+                                application.arrowKeyDown();
+                        }
                     }
                 } else {
-                    if (modifiers.isShiftDown()) {
-                        var cursorBrowsingSession = deviceBrowser.createCursorSession();
+                    if (selectPressed) {
+                        cursorBrowsingSession = deviceBrowser.createCursorSession();
                         cursorBrowsingSession.selectPrevious();
                     } else {
-                        application.arrowKeyUp();
+                        if (modifiers.isShiftDown()) {
+                            for (i = 0; i < speed; i++) {
+                            application.arrowKeyUp();
+                            }
+                        } else {
+                            application.arrowKeyUp();
+                        }
                     }
                 }
                 ;
@@ -224,7 +271,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                     inc = (value === 1 ? 1 : -1) * (pressed ? 1 : 10);
                     groove.getShuffleAmount().set(Math.min(Math.max(grooveAmount + inc, 0), 200), 201);
                 } else if (swingEditMode === SwingModes.ShuffleRate) {
-                    groove.getShuffleRate().setRaw(value === 1 ? 1 : 0)
+                    groove.getShuffleRate().setRaw(value === 1 ? 1 : 0);
                 }
                 break;
         }
@@ -274,14 +321,20 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
         }
         if (browsing) {
             deviceBrowser.cancelBrowsing();
-            mode = Modes.MST;
+            //mode = Modes.MST;
+            disableMode();
         } else {
             
             //noch nich ganz am worken
-            if (shift) {
+            
+            if (selectPressed) {
+                cursorDevice.browseToInsertBeforeDevice();
+                mode = Modes.BROWSER;
+            }
+            else if (shift) {
                 cursorDevice.browseToInsertAfterDevice();
                 mode = Modes.BROWSER;
-            } else {
+            }else {
                 deviceBrowser.activateSession(deviceBrowser.getDeviceSession());
                 deviceBrowser.startBrowsing();
                 mode = Modes.BROWSER;
@@ -399,6 +452,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
         switch (mode) {
             case Modes.BROWSER:
                 application.enter();
+                disableMode();
                 break;
             case Modes.GRID_LEN:
                 currentMode.pushAction(value);
@@ -440,7 +494,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
     });
 
     masterTrack.addVuMeterObserver(125, 0, true, function (value) {
-        if (vuMode == Modes.MST) {
+        if (vuMode === Modes.MST) {
             if (value === 128) {
                 queueMidi(0xB0, 38, 127);
             } else {
@@ -449,7 +503,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
         }
     });
     masterTrack.addVuMeterObserver(125, 1, true, function (value) {
-        if (vuMode == Modes.MST) {
+        if (vuMode === Modes.MST) {
             if (value === 128) {
                 queueMidi(0xB0, 39, 127);
             } else {
@@ -458,7 +512,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
         }
     });
     cursorTrack.addVuMeterObserver(125, 0, true, function (value) {
-        if (vuMode == Modes.GROUP) {
+        if (vuMode === Modes.GROUP) {
             if (value === 128) {
                 queueMidi(0xB0, 38, 127);
             } else {
@@ -467,7 +521,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
         }
     });
     cursorTrack.addVuMeterObserver(125, 1, true, function (value) {
-        if (vuMode == Modes.GROUP) {
+        if (vuMode === Modes.GROUP) {
             if (value === 128) {
                 queueMidi(0xB0, 39, 127);
             } else {
