@@ -302,9 +302,16 @@ function NoteView (noteInput) {
 		noteToIndex = {}; 
 
 		for (i = 0; i < 64; i++) {
-			var octOffset = Math.floor((i + 4) / tmpScale.length);
-			var index = (i + 4) % tmpScale.length;
+			//var octOffset = Math.floor((i + 4) / tmpScale.length);
+			//var index = (i + 4) % tmpScale.length;
+			//var notevalue = baseNote + tmpScale[index] + octOffset * 12;
+
+
+            var newIndex = i - 5 * Math.floor(i / 8);
+            var octOffset = Math.floor(newIndex / tmpScale.length);
+            index = newIndex % tmpScale.length;
 			var notevalue = baseNote + tmpScale[index] + octOffset * 12;
+
 
 
 			var rowIndex = Math.floor(i / 8);

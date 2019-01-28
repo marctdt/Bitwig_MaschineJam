@@ -58,9 +58,18 @@ function ModifierBank() {
     this.setDpadRightDown = function (value) {
         dpadRightDown = value;
     };
-
+    var shiftOn = false;
     this.notifyShift = function (shiftDownValue) {
         shiftDown = shiftDownValue;
+        if (!shiftDownValue) 
+            shiftOn = !shiftOn;
+
+        if (shiftOn || shiftDownValue)
+                host.showPopupNotification("Shift On");
+            else
+                host.showPopupNotification("Shift Off");
+
+
         currentMode.notifyModifier((selectDown ? ModifierMask.Select : 0) || (shiftDown ? ModifierMask.Shift : 0) || (duplicateDown ? ModifierMask.Duplicate : 0));
     };
 
@@ -78,7 +87,10 @@ function ModifierBank() {
     };
 
     this.isShiftDown = function () {
-        return shiftDown;
+        var tmp = shiftOn;
+        if (shiftDown)
+        shiftOn = true;
+        return shiftDown  || tmp;
     };
 
     this.isDuplicateDown = function () {

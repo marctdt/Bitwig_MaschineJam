@@ -196,7 +196,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
 
     mainEncoder.setCallback(function (value) {
         //println("test" + value);
-        var speed = 6;
+        var speed = 4;
         var i = 0;
         switch (mode) {
             case Modes.NONE:
@@ -226,13 +226,13 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                 break;
             case Modes.BROWSER:
                 //println(value);
-                speed = 6;
+                var speedBrowser = 6;
                 if (value === 1) {
                     if (modifiers.isShiftDown()) {
                         cursorBrowsingSession.selectNext();
                     } else {
-                            if (modifiers.isSelectDown()) {
-                            for (i = 0; i < speed; i++) {
+                        if (modifiers.isSelectDown()) {
+                            for (i = 0; i < speedBrowser; i++) {
                                 //application.arrowKeyDown();
                                 cursorBrowsingSession.getCursorResult().selectNext();
                             }
@@ -247,7 +247,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                         cursorBrowsingSession.selectPrevious();
                     } else {
                     if (modifiers.isSelectDown()) {
-                        for (i = 0; i < speed; i++) {
+                        for (i = 0; i < speedBrowser; i++) {
                             cursorBrowsingSession.getCursorResult().selectPrevious();
                             //application.arrowKeyUp();
                             }
@@ -257,7 +257,6 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                         }
                     }
                 }
-                ;
                 break;
             case Modes.GROUP:
                 inc = (value === 1 ? 1 : -1) * (shift ? 1 : 6);
