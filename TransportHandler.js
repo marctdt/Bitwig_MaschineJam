@@ -210,7 +210,7 @@ function TransportHandler(trackHandler, cursorDevice) {
         if (value === 0) {
             return;
         }
-        if (shift) {
+        if (modifiers.isShiftDown()) {
             transport.stop();
         } else {
             //if (playing) {
@@ -226,7 +226,7 @@ function TransportHandler(trackHandler, cursorDevice) {
         if (value === 0) {
             return;
         }
-        if (shift) {
+        if (modifiers.isShiftDown()) {
             transport.toggleLauncherOverdub();
         } else {
             var status = trackHandler.getTrackStatus();
@@ -289,10 +289,11 @@ function TransportHandler(trackHandler, cursorDevice) {
                     if (value !== 0) {
                         transport.toggleClick();
                     }
+                    modifiers.isShiftDown();
                     break;
                 case NavButtonMode.Device:
                     if (value !== 0) {
-                        if (shift) {
+                        if (modifiers.isShiftDown()) {
                             cursorDevice.selectParent();
                             cursorDevice.selectInEditor();
                         } else {
@@ -325,10 +326,11 @@ function TransportHandler(trackHandler, cursorDevice) {
                     if (value !== 0) {
                         transport.toggleLoop();
                     }
+                    modifiers.isShiftDown();
                     break;
                 case NavButtonMode.Device:
                     if (value !== 0) {
-                        if (shift) {
+                        if (modifiers.isShiftDown()) {
                             if (currentSlotList && currentSlotList.length > 0) {
                                 cursorDevice.selectFirstInSlot(currentSlotList[0]);
                             }
