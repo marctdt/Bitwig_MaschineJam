@@ -203,7 +203,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                 if (value === 1) {
                     if (modifiers.isSelectDown())
                         cursorTrack.selectNext();
-                    else if (shift)
+                    else if (modifiers.isShiftDown())
                         for (i = 0; i < speed; i++)
                             transport.fastForward();
                     else
@@ -212,7 +212,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                 else {
                     if (modifiers.isSelectDown())
                         cursorTrack.selectPrevious();
-                    else if(shift)
+                    else if(modifiers.isShiftDown())
                         for (i = 0; i < speed; i++)
                             transport.rewind();
                     else
