@@ -358,7 +358,8 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
             
             
 
-            if (shift) {
+            //if (shift) {
+            if (modifiers.isShiftDown()) {
                 cursorDevice.beforeDeviceInsertionPoint().browse();
                 workaroundBrowsing = true;
                 mode = Modes.BROWSER;
