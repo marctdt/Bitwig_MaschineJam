@@ -29,13 +29,13 @@ function ModifierBank() {
      });*/
     
     clearButton.setCallback(function (value) {
-        clearDown = value == 127;
+        clearDown = value === 127;
         currentMode.notifyClear(clearDown);
         clearButton.sendValue(value);
     });
 
     duplicateButton.setCallback(function (value) {
-        println("duplicate is down");
+        //println("duplicate is down");
         duplicateButton.sendValue(value);
         duplicateDown = value;
         currentMode.notifyModifier((selectDown ? ModifierMask.Select : 0) | (shiftDown ? ModifierMask.Shift : 0) | (duplicateDown ? ModifierMask.Duplicate : ModifierMask.DuplicateUp));

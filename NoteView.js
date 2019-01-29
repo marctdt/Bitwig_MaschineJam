@@ -230,11 +230,20 @@ function NoteView (noteInput) {
 		return baseNote;
 	};
 
+    var isDuplicating = false;
 	this.notifyModifier = function (modifierState) {
 		if (active) {
 			if (modifierState === 5) {
-				globalClipView.duplicateContent(); // Duplicate + Shift
-			} 
+                globalClipView.duplicateContent(); // Duplicate + Shift
+                isDuplicating = true;
+            }
+            else if (modifierState === ModifierMask.DuplicateUp) {
+                if (!isDuplicating) {
+                    applicationControl.duplicate();
+                    host.showPopupNotification("Duplicate");
+                }
+                isDuplicating = false;
+        }
 		}
 	};
 
