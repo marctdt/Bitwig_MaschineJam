@@ -42,6 +42,7 @@ function ApplicationControl(cursorClip) {
                 if (modifiers.isSelectDown()) {
                     if (layout === "EDIT") {
                         application.setPanelLayout(previousLayout);
+                        previousLayout = "";
                     } else {
                         previousLayout = layout;
                         application.setPanelLayout("EDIT");
@@ -49,8 +50,11 @@ function ApplicationControl(cursorClip) {
                 }
                  else if (layout === "ARRANGE") {
                     application.setPanelLayout("MIX");
-                }else /*if (layout === "MIX") */{
-                    application.setPanelLayout("ARRANGE");
+                } else /*if (layout === "MIX") */{
+                    if (previousLayout !== "")
+                        application.setPanelLayout(previousLayout);
+                    else
+                        application.setPanelLayout("ARRANGE");
                 }
             }
         }
