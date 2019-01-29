@@ -25,6 +25,7 @@ function ApplicationControl(cursorClip) {
         TOGGLE_AUTOMATION: 59
     };
 
+    var previousLayout = "";
     var arrangeButton = controls.createButton(MAIN_BUTTONS.ARRANGE);
     arrangeButton.setCallback(function (value) {
         //arrangeButton.sendValue(value);
@@ -39,10 +40,12 @@ function ApplicationControl(cursorClip) {
                 // rotateView();
             } else {
                 if (modifiers.isSelectDown()) {
-                    //if (layout === "EDIT") {
-                    //    application.setPanelLayout("ARRANGE");
-                    //} else
+                    if (layout === "EDIT") {
+                        application.setPanelLayout(previousLayout);
+                    } else {
+                        previousLayout = layout;
                         application.setPanelLayout("EDIT");
+                    }
                 }
                  else if (layout === "ARRANGE") {
                     application.setPanelLayout("MIX");

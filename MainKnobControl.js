@@ -44,13 +44,19 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
     var clipLength = 0.0;
     var cursorTrackDeviceBank = cursorTrack.createDeviceBank(8);
     var browsing = false;
+    var deviceBrowser = cursorDevice.createDeviceBrowser(1, 1);
+    var cursorBrowsingSession = deviceBrowser.createCursorSession();
+    var filterColumnBank = cursorBrowsingSession.createFilterBank(8);
+
+    this.getFilterColumn = function () {
+        return filterColumnBank;
+    };
 
 
     this.getBrowsing = function () {
         return browsing;
     };
 
-    var cursorBrowsingSession = null;
 
     this.getBrowser = function () {
         return cursorBrowsingSession;
@@ -70,7 +76,6 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
 
     var bankNrOfDevices = 0;
 
-    var deviceBrowser = cursorDevice.createDeviceBrowser(1, 1);
     //var deviceBrowser = cursorTrackDeviceBank.getDevice(0).createDeviceBrowser(4,4);
 
     cursorTrackDeviceBank.addDeviceCountObserver(function (nrOfDevices) {
@@ -83,7 +88,6 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
     });
 
 
-    cursorBrowsingSession = deviceBrowser.createCursorSession();
             cursorBrowsingSession.getCursorFilter().addNameObserver(99, "", function (value) {
                 if (value !== "") {
                     host.showPopupNotification(value);
