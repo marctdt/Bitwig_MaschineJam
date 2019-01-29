@@ -41,20 +41,24 @@ function ApplicationControl(cursorClip) {
             } else {
                 if (modifiers.isSelectDown()) {
                     if (layout === "EDIT") {
-                        application.setPanelLayout(previousLayout);
+                        application.setPanelLayout(previousLayout === "" ? "ARRANGE" : previousLayout);
                         previousLayout = "";
                     } else {
                         previousLayout = layout;
                         application.setPanelLayout("EDIT");
                     }
                 }
-                 else if (layout === "ARRANGE") {
+
+                else if (layout === "ARRANGE") {
                     application.setPanelLayout("MIX");
-                } else /*if (layout === "MIX") */{
-                    if (previousLayout !== "")
-                        application.setPanelLayout(previousLayout);
-                    else
-                        application.setPanelLayout("ARRANGE");
+                } else if (layout === "MIX") {
+                    //if (previousLayout !== "")
+                    //    application.setPanelLayout(previousLayout);
+                    //else
+                    application.setPanelLayout("ARRANGE");
+                } else {
+                        application.setPanelLayout(previousLayout === "" ? "ARRANGE" : previousLayout);
+                        previousLayout = "";
                 }
             }
         }
