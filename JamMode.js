@@ -16,7 +16,11 @@ function JamMode(mainView, trackView, sceneView) {
     this.notifyShift = function (/*shiftDown*/) {
     };
 
-    this.notifyModifier = function (/*modifierState*/) {
+    this.notifyModifier = function (modifierState) {
+        if (modifierState === ModifierMask.Duplicate) {
+            applicationControl.duplicate();
+            host.showPopupNotification("Duplicate");
+        }
     };
 
     this.modifyGrid = function (/*incValue, pressedModifier*/) {

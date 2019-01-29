@@ -164,8 +164,8 @@ function ApplicationControl(cursorClip) {
     };
 
     this.duplicate = function () {
-        application.duplicate();    
-    }
+        application.duplicate();
+    };
 
     this.exec = function (command) {
         switch (command) {
