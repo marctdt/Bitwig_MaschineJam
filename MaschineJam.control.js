@@ -14,7 +14,7 @@
  */
 
 loadAPI(1);
-var versionController = "5.28";
+var versionController = "5.29";
 host.defineController("Native Instruments", "Maschine Jam Marc Version", versionController, "ca344330-d262-4b84-97ce-20a02c55312e");
 host.defineMidiPorts(1, 1);
 host.addDeviceNameBasedDiscoveryPair(["Maschine Jam - 1"], ["Maschine Jam - 1"]);
@@ -145,10 +145,15 @@ function init() {
 
 	var stopAllButton = controls.createButton(MAIN_BUTTONS.IN_BUTTON);
 	stopAllButton.setCallback(function (value) {
-		stopAllButton.sendValue(value);
-		if (value > 0) {
-			rootTrack.stop();
-		}
+        stopAllButton.sendValue(value);
+        if (!modifiers.isSelectDown()) {
+            if (value > 0) {
+                rootTrack.stop();
+            }
+        }
+        else {
+            rootTrack.returnToArrangement();
+        }
 	});
 
 	var primaryDevice = cursorTrack.createCursorDevice("Primary", 0);

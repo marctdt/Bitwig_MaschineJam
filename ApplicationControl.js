@@ -170,6 +170,9 @@ function ApplicationControl(cursorClip) {
     this.duplicate = function () {
         application.duplicate();
     };
+    this.navigateIntoTrackGroup = function (track) {
+        application.navigateIntoTrackGroup(track);
+    };
 
     this.exec = function (command) {
         switch (command) {
