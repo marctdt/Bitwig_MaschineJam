@@ -14,7 +14,7 @@
  */
 
 loadAPI(1);
-var versionController = "5.27";
+var versionController = "5.28";
 host.defineController("Native Instruments", "Maschine Jam Marc Version", versionController, "ca344330-d262-4b84-97ce-20a02c55312e");
 host.defineMidiPorts(1, 1);
 host.addDeviceNameBasedDiscoveryPair(["Maschine Jam - 1"], ["Maschine Jam - 1"]);
@@ -766,10 +766,14 @@ function onMidi(status, data1, data2) {
 	}
 }
 
+var timeLastShiftPressed = Date.now();
 function onSysex(data) {
 	var i;
 
-	if (data === "f000210915004d5000014d01f7") {
+    if (data === "f000210915004d5000014d01f7") {
+        if (calcTimeElapsedms(timeLastShiftPressed, Date.now()) < 400)
+            modifiers.setShiftLock(!modifiers.getShiftLock());
+        timeLastShiftPressed = Date.now();
 		for (i = 0; i < shiftReceivers.length; i++) {
 			shiftReceivers[i].notifyShift(true);
 		}
@@ -784,6 +788,10 @@ function onSysex(data) {
 		println(" RECEIVED SysEx = " + data);
 	}
 }
+
+function calcTimeElapsedms(start, end) {
+    return end - start;
+};
 
 function exit() {
 	println(" ==== Shutting Down ===== ");

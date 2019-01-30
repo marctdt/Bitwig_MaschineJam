@@ -69,6 +69,8 @@ function ModifierBank() {
     };
 
     this.setShiftLock = function (value) {
+        lockButton.sendValue(value ? 127 : 0);
+        host.showPopupNotification(value ? "Shift Lock ON" : "Shift Lock OFF");
         shiftLock = value;
     };
 

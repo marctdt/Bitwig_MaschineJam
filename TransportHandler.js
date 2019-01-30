@@ -275,11 +275,7 @@ function TransportHandler(trackHandler, cursorDevice) {
         if (value === 0) {
             return;
         }
-        else if (modifiers.isShiftDown()) {
-            modifiers.setShiftLock(!modifiers.getShiftLock());
-            host.showPopupNotification(modifiers.getShiftLock() ? "Shift Lock ON" : "Shift Lock OFF");
-        }
-        else { transport.toggleWriteClipLauncherAutomation(); }
+        transport.toggleWriteClipLauncherAutomation();
     });
 
     leftNavButton.setCallback(function (value) {
