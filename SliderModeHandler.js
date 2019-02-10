@@ -268,7 +268,7 @@ function SliderModeHandler(mixerTrackBank, effectTrackBank, numTracks, cursorDev
         if (value === 0) {
             return;
         }
-        if (modifiers.isShiftDown()) {
+        if (modifiers.isSelectDown()) {
             if (controlMode !== ControlModes.MIDI_CC) {
                 switchToDeviceMode(ControlModes.MIDI_CC);
                 controlMode = ControlModes.MIDI_CC;
@@ -290,11 +290,11 @@ function SliderModeHandler(mixerTrackBank, effectTrackBank, numTracks, cursorDev
             currentMode.updateSliders();
             radioModes();
             cursorDevice.selectInEditor();
-            if (modifiers.isSelectDown()) {
+            if (modifiers.isShiftDown()) {
                 cursorDevice.isWindowOpen().toggle();
             }
             host.showPopupNotification("Touchstrip controls Device");
-        } else if (modifiers.isSelectDown()) {
+        } else if (modifiers.isShiftDown()) {
             cursorDevice.isWindowOpen().toggle();
         } else if (modifiers.isClearDown()){
             host.showPopupNotification("TODO clear device ... mit enter ?");

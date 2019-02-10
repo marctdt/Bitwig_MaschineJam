@@ -71,9 +71,9 @@ function TrackViewState() {
  * @param {TrackBankContainer} efxTrackBankContainer
  * 
  */
-function TrackViewContainer(trackBankContainer, efxTrackBankContainer) {
-    var mixerView = new TrackView(trackBankContainer, this, TrackViewBasicMode.TRACK);
-    var efxView = new TrackView(efxTrackBankContainer, this, TrackViewBasicMode.EFX);
+function TrackViewContainer(trackBankContainer, efxTrackBankContainer,cursorTrack) {
+    var mixerView = new TrackView(trackBankContainer, this, TrackViewBasicMode.TRACK,cursorTrack);
+    var efxView = new TrackView(efxTrackBankContainer, this, TrackViewBasicMode.EFX,cursorTrack);
 
     this.mode = TrackViewModes.SELECT;
 
@@ -157,7 +157,7 @@ function TrackViewContainer(trackBankContainer, efxTrackBankContainer) {
  * @param {TrackViewContainer} parent
  * 
  */
-function TrackView(trackBank, parent, basemode) {
+function TrackView(trackBank, parent, basemode,cursorTrack) {
     var active = false;
     var states = [];
 
@@ -202,10 +202,13 @@ function TrackView(trackBank, parent, basemode) {
             
             switch (index) {
                 case 0:
-                    applicationControl.showNoteEditor();
+                    applicationControl.showDevices();
                     break;
                 case 1:
                     applicationControl.getApplication().activateEngine();
+                    break;
+                case 2:
+                    applicationControl.hideSubPanel();
                     break;
                 case 3:
                     applicationControl.getApplication().previousProject();
@@ -213,12 +216,15 @@ function TrackView(trackBank, parent, basemode) {
                 case 4:
                     applicationControl.getApplication().nextProject();
                     break;
+                case 5:
+                    applicationControl.showAutomationEditor();
+                    break;
                 case 6:
                     host.showPopupNotification("Save Project");
                     applicationControl.invokeAction("Save");
                     break;
                 case 7:
-                    applicationControl.showDevices();
+                    applicationControl.showNoteEditor();
                     break;
             }
             return;
@@ -250,6 +256,9 @@ function TrackView(trackBank, parent, basemode) {
                         track.selectInMixer();
                         trackBank.selectClipInSlot(index);
                         track.makeVisibleInMixer();
+                        //cursorTrack.isPinned().set(false);
+                        //cursorTrack.select();
+                        applicationControl.getApplication().focusPanelBelow();
                     } else {
                         if (basemode === TrackViewBasicMode.TRACK) {
                             if (modifiers.isSelectDown()) {

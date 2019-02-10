@@ -54,7 +54,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
 
 
     this.getBrowsing = function () {
-        return browsing;
+        return mode === Modes.BROWSER;
     };
 
 
@@ -87,14 +87,22 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
         clipLength = length;
     });
 
-
+    var filterColumnSelected = "";
             cursorBrowsingSession.getCursorFilter().addNameObserver(99, "", function (value) {
                 if (value !== "") {
                     host.showPopupNotification(value);
                     println(value);
                 }
-            });
+                    filterColumnSelected = value;
+    });
 
+    this.getFilterColumnSelected = function () {
+        return filterColumnSelected;
+    };
+
+    this.hasNextFilterColumn = function () {
+        return cursorBrowsingSession.getCursorFilter().hasNext();
+    };
 
     var groove = host.createGroove();
     var grooveActive = false;
@@ -236,26 +244,38 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                         cursorBrowsingSession.selectNext();
                     } else {
                         if (modifiers.isSelectDown()) {
+                            if (workaroundBrowsing) {
+                                selectDeviceWorkaround();
+                            }
                             for (i = 0; i < speedBrowser; i++) {
                                 //application.arrowKeyDown();
                                 cursorBrowsingSession.getCursorResult().selectNext();
                             }
                         }
                         else {
-                                cursorBrowsingSession.getCursorResult().selectNext();
-                                //application.arrowKeyDown();
+                            if (workaroundBrowsing) {
+                                selectDeviceWorkaround();
+                            }
+                            cursorBrowsingSession.getCursorResult().selectNext();
+                            //application.arrowKeyDown();
                         }
                     }
                 } else {
                     if (modifiers.isShiftDown()) {
                         cursorBrowsingSession.selectPrevious();
                     } else {
-                    if (modifiers.isSelectDown()) {
-                        for (i = 0; i < speedBrowser; i++) {
-                            cursorBrowsingSession.getCursorResult().selectPrevious();
-                            //application.arrowKeyUp();
+                        if (modifiers.isSelectDown()) {
+                            if (workaroundBrowsing) {
+                                selectDeviceWorkaround();
+                            }
+                            for (i = 0; i < speedBrowser; i++) {
+                                cursorBrowsingSession.getCursorResult().selectPrevious();
+                                //application.arrowKeyUp();
                             }
                         } else {
+                            if (workaroundBrowsing) {
+                                selectDeviceWorkaround();
+                            }
                             cursorBrowsingSession.getCursorResult().selectPrevious();
                             //application.arrowKeyUp();
                         }
@@ -341,18 +361,38 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
     deviceBrowser.addIsBrowsingObserver(function (value) {
         browsing = value;
         browserButton.sendValue(browsing ? 127 : 0, true);
+        if (!value) {
+            disableMode();
+        }
     });
     var workaroundBrowsing = false;
+    this.getWorkaroundBrowsing = function () {
+        return workaroundBrowsing;
+    };
+    function selectDeviceWorkaround (){
+        application.arrowKeyDown();
+        application.arrowKeyRight();
+        workaroundBrowsing = false;
+    };
+    this. selectDeviceWorkaround=function() {
+        selectDeviceWorkaround();
+    };
+
     browserButton.setCallback(function (value) {
         if (value === 0) {
-            if (workaroundBrowsing) {
-                application.arrowKeyDown();
-                application.arrowKeyRight();
-                workaroundBrowsing = false;
-            }
+        //    if (workaroundBrowsing) {
+        //        application.arrowKeyDown();
+        //        application.arrowKeyRight();
+        //        workaroundBrowsing = false;
+        //    }
             return;
         }
-        if (browsing) {
+        if (workaroundBrowsing) {
+            workaroundBrowsing = false;
+            disableMode();
+            application.escape();
+        }
+        else if (browsing) {
             deviceBrowser.cancelBrowsing();
             //mode = Modes.MST;
             disableMode();
@@ -373,7 +413,7 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
                 workaroundBrowsing = true;
                 mode = Modes.BROWSER;
             }else {
-                deviceBrowser.activateSession(deviceBrowser.getDeviceSession());
+                //deviceBrowser.activateSession(deviceBrowser.getDeviceSession());
                 deviceBrowser.startBrowsing();
                 workaroundBrowsing = true;
                 mode = Modes.BROWSER;
@@ -569,4 +609,8 @@ function MainKnobKontrol(cursorTrack, transport, cursorClip, cursorDevice) {
             }
         }
     });
+
+    this.getMode = function () {
+        return mode;
+    };
 }

@@ -213,12 +213,12 @@ function TransportHandler(trackHandler, cursorDevice) {
         if (modifiers.isShiftDown()) {
             transport.stop();
         } else {
-            if (playing) {
-                transport.stop();
-            }
-            else {
+            //if (playing) {
+            //    transport.stop();
+            //}
+            //else {
                 transport.play();
-            }
+            //}
         }
     });
 

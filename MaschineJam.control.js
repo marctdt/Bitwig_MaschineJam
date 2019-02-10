@@ -14,7 +14,7 @@
  */
 
 loadAPI(1);
-var versionController = "5.29";
+var versionController = "5.31";
 host.defineController("Native Instruments", "Maschine Jam Marc Version", versionController, "ca344330-d262-4b84-97ce-20a02c55312e");
 host.defineMidiPorts(1, 1);
 host.addDeviceNameBasedDiscoveryPair(["Maschine Jam - 1"], ["Maschine Jam - 1"]);
@@ -108,7 +108,7 @@ function init() {
 
 	var trackBankContainer = new TrackBankContainer(trackBank);
 	var efxTrackBankContainer = new EffectBankContainer(host.createEffectTrackBank(7, numScenes), host.createMasterTrack(numScenes));
-	var trackViewContainer = new TrackViewContainer(trackBankContainer, efxTrackBankContainer);
+	var trackViewContainer = new TrackViewContainer(trackBankContainer, efxTrackBankContainer,cursorTrack);
 
 	var sceneView = new SceneLaunchView(trackBank, numScenes, numTracks);
 	var noteView = gNoteViewManager.createNoteLayoutView(noteInput);
@@ -198,11 +198,11 @@ function GlobalClipView(patternLengthView, clip) {
 
     this.resetDoubleToggle = function () {
         doubleToggle = false;
-    }
+    };
 
     this.getDoubleToggle = function () {
         return doubleToggle;
-    }
+    };
 
 	track.exists().addValueObserver(function (value) {
 		clipSelected = value;
@@ -696,16 +696,18 @@ function initLeftButtons() {
     var i = 0;
 
 	dirPadUp.setCallback(
-		function (value) {
+        function (value) {
 
-			if (value !== 0) {
+            if (value !== 0) {
                 if (knobControl.getBrowsing()) {
+                    if (knobControl.getWorkaroundBrowsing())
+                        knobControl.selectDeviceWorkaround();
                     knobControl.getBrowser().getCursorFilter().selectFirst();
                     knobControl.getBrowser().getCursorFilter().selectNext();
 
                     if (modifiers.isShiftDown()) {
                         //for (i = 0; i < speed; i++) {
-                            knobControl.getBrowser().getCursorFilter().createCursorItem().selectFirst();
+                        knobControl.getBrowser().getCursorFilter().createCursorItem().selectFirst();
                         //}
                     }
                     else {
@@ -715,33 +717,63 @@ function initLeftButtons() {
                 else {
                     currentMode.navigate(DirectionPad.TOP);
                 }
-			}
-		});
+            }
+        });
 	dirPadLeft.setCallback(
 		function (value) {
 			if (value !== 0) {
-                //if (knobControl.getBrowsing()) {
-                //    knobControl.getBrowser().getCursorFilter().selectPrevious();
-                //} else {
+                if (knobControl.getBrowsing()) {
+                    if (knobControl.getWorkaroundBrowsing())
+                    knobControl.selectDeviceWorkaround();
+                    knobControl.getBrowser().getCursorFilter().selectFirst();
+                    //knobControl.getBrowser().getCursorFilter().selectNext();
+                    //knobControl.getBrowser().getCursorFilter().selectNext();
+                    //knobControl.getBrowser().getCursorFilter().selectNext();
+                    //knobControl.getBrowser().getCursorFilter().selectNext();
+                    //knobControl.getBrowser().getCursorFilter().selectNext();
+                    //knobControl.getBrowser().getCursorFilter().selectPrevious();
+                    if (modifiers.isShiftDown()) {
+                        knobControl.getBrowser().getCursorFilter().createCursorItem().selectFirst();
+                    }
+                    else {
+                        knobControl.getBrowser().getCursorFilter().createCursorItem().selectPrevious();
+                    }
+                } else {
                     currentMode.navigate(DirectionPad.LEFT);
-                //}
+                }
 			}
 		});
 	dirPadRight.setCallback(
 		function (value) {
 			modifiers.setDpadRightDown(value);
-			if (value !== 0) {
-                //if (knobControl.getBrowsing()) {
-                //    knobControl.getBrowser().getCursorFilter().selectNext();
-                //} else {
+            if (value !== 0) {
+                if (knobControl.getBrowsing()) {
+                    if (knobControl.getWorkaroundBrowsing())
+                    knobControl.selectDeviceWorkaround();
+                    knobControl.getBrowser().getCursorFilter().selectFirst();
+                   // while (knobControl.getFilterColumnSelected() !== "Device" && knobControl.hasNextFilterColumn())
+                   //{
+                   // knobControl.getBrowser().getCursorFilter().selectNext();
+                   // }
+
+                    if (modifiers.isShiftDown()) {
+                        knobControl.getBrowser().getCursorFilter().createCursorItem().selectLast();
+                    }
+                    else {
+                        knobControl.getBrowser().getCursorFilter().createCursorItem().selectNext();
+                    }
+                    //    knobControl.getBrowser().getCursorFilter().selectNext();
+                } else {
                     currentMode.navigate(DirectionPad.RIGHT);
-                //}
-			}
+                }
+            }
 		});
 	dirPadDown.setCallback(
-		function (value) {
-			if (value !== 0) {
+        function (value) {
+            if (value !== 0) {
                 if (knobControl.getBrowsing()) {
+                    if (knobControl.getWorkaroundBrowsing())
+                        knobControl.selectDeviceWorkaround();
                     knobControl.getBrowser().getCursorFilter().selectFirst();
                     knobControl.getBrowser().getCursorFilter().selectNext();
 
@@ -755,8 +787,8 @@ function initLeftButtons() {
                     }
                 }
                 else { currentMode.navigate(DirectionPad.DOWN); }
-			}
-		});
+            }
+        });
 
 	dirPadUp.sendValue(0, true);
 	dirPadDown.sendValue(0, true);
@@ -776,13 +808,13 @@ function onSysex(data) {
 	var i;
 
     if (data === "f000210915004d5000014d01f7") {
-        if (calcTimeElapsedms(timeLastShiftPressed, Date.now()) < 400)
-            modifiers.setShiftLock(!modifiers.getShiftLock());
-        timeLastShiftPressed = Date.now();
 		for (i = 0; i < shiftReceivers.length; i++) {
 			shiftReceivers[i].notifyShift(true);
 		}
 	} else if (data === "f000210915004d5000014d00f7") {
+        if (calcTimeElapsedms(timeLastShiftPressed, Date.now()) < 400)
+            modifiers.setShiftLock(!modifiers.getShiftLock());
+        timeLastShiftPressed = Date.now();
 		for (i = 0; i < shiftReceivers.length; i++) {
 			shiftReceivers[i].notifyShift(false);
 		}

@@ -111,6 +111,14 @@ function ApplicationControl(cursorClip) {
         application.remove();
     };
 
+    this.enter = function () {
+        application.enter();
+    };
+
+    this.escape = function () {
+        application.escape();
+    };
+
     this.showAudioEditor = function () {
         application.toggleDevices();
         application.toggleNoteEditor();
@@ -121,9 +129,21 @@ function ApplicationControl(cursorClip) {
         application.toggleNoteEditor();
     };
 
+    this.hideSubPanel = function () {
+        application.toggleDevices();
+        application.toggleNoteEditor();
+        application.toggleNoteEditor();
+    };
+
+
     this.showDevices = function () {
         application.toggleNoteEditor();
         application.toggleDevices();
+    };
+
+    this.showAutomationEditor = function () {
+        application.toggleNoteEditor();
+        application.toggleAutomationEditor();
     };
 
     this.invokeAction = function (actionName) {
